@@ -31,9 +31,9 @@ function spawnThingy(params) {
 		    // console.log('stderr: ' + data);
 		    if (process) {
 	    		//res.send("Failed");
+	    		process.kill();
 	    		return reject("Failed");
 	    		//return "error";
-	    		process.kill();
 		    }
 		    // process.kill('SIGHUP'); // This exits Node itself on Windows GGWP Node
 		    //Here is where the error output goes
@@ -49,7 +49,7 @@ function spawnThingy(params) {
 			}	
 		});
 		process.on('close', function(code) {
-		    console.log('closing code: ' + code);
+		    //console.log('closing code: ' + code);
 		    // console.log(jsonStr);
 				jsonStr = jsonStr.replace(/'/g, '"');
 				var data = JSON.parse(jsonStr);
@@ -64,6 +64,15 @@ function spawnThingy(params) {
 	});
 }
 
+function makeHTML(params) {
+	var html = '<html><head> <style> table {border: 1px solid black; border-spacing: 5px;} td {border: 1px solid black; padding: 15px; text-align: left;}' 
+	+ 'th {border: 1px solid black; padding: 15px;} </style> </head> <body> <table> <tr> <th>Event</th> <th>Paid</th> <th>Pending</th> </tr> <tr> <td>ClickBait</td> <td>' 
+	+ params['CB'][0] +'</td> <td>' + params['CB'][1] +'</td> </tr> <tr> <td>Laser Tag</td> <td>' + params['LT'][0] +'</td> <td>' 
+	+ params['LT'][1] +'</td> </tr> <tr> <td>SUBG</td> <td>' + params['SUBG'][0] +'</td> <td>' + params['SUBG'][1] +'</td> </tr> <tr> <td>Under The Hood</td> <td>' 
+	+ params['UTH'][0] +'</td> <td>' + params['UTH'][1] +'</td> </tr> </table> </body> </html>';
+
+	return html;
+}
 
 app.get('/', (req, res, next) => {
 	var data = [
@@ -72,44 +81,60 @@ app.get('/', (req, res, next) => {
 		['ayush.bishnoi2017@vitstudent.ac.in', '9650421154', 'Clickbait', '', '', ''],
 		['sonal.bhatia2017@vitstudent.ac.in', '9717040661', 'UTH', '', '', '']
 	];
-	console.log(data);
+	//console.log(data);
 
-	spawnThingy({'username': data[0][0], 'password': data[0][1], 'event': data[0][2]})
+	var promises = [null, null, null, null]
+
+	promises[0] = spawnThingy({'username': data[0][0], 'password': data[0][1], 'event': data[0][2]})
 	.then((resp) => {
 		data[0][3] = resp['success'];
 		data[0][4] = resp['pending'];
-		console.log("0: " + resp["success"] + " " + resp["pending"])
-		console.log(data[0]);
+		data[0][5] = resp['data'];
+		console.log(data[0][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
 		return Promise.resolve(resp);
 	});
 	
-	spawnThingy({'username': data[1][0], 'password': data[1][1], 'event': data[1][2]})
+	promises[1] = spawnThingy({'username': data[1][0], 'password': data[1][1], 'event': data[1][2]})
 	.then((resp) => {
 		data[1][3] = resp['success'];
 		data[1][4] = resp['pending'];
-		console.log("1: " + resp["success"] + " " + resp["pending"])
-		console.log(data[1]);
+		data[1][5] = resp['data'];
+		console.log(data[1][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
 		return Promise.resolve(resp);
 	});
 	
-	spawnThingy({'username': data[2][0], 'password': data[2][1], 'event': data[2][2]})
+	promises[2] = spawnThingy({'username': data[2][0], 'password': data[2][1], 'event': data[2][2]})
 	.then((resp) => {
 		data[2][3] = resp['success'];
 		data[2][4] = resp['pending'];
-		console.log("2: " + resp["success"] + " " + resp["pending"])
-		console.log(data[2]);
+		data[2][5] = resp['data'];
+		console.log(data[2][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
 		return Promise.resolve(resp);
 	});
 
-	spawnThingy({'username': data[3][0], 'password': data[3][1], 'event': data[3][2]})
+	promises[3] = spawnThingy({'username': data[3][0], 'password': data[3][1], 'event': data[3][2]})
 	.then((resp) => {
 		data[3][3] = resp['success'];
 		data[3][4] = resp['pending'];
-		console.log("3: " + resp["success"] + " " + resp["pending"])
-		console.log(data[3]);
+		data[3][5] = resp['data'];
+		console.log(data[3][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
 		return Promise.resolve(resp);
 	});
 	
+	Promise.all(promises).then(function() {
+		var params = {
+			'CB': [data[2][3], data[2][4]],
+			'SUBG': [data[0][3], data[0][4]],
+			'UTH': [data[3][3], data[3][4]],
+			'LT': [data[1][3], data[1][4]]
+		};
+
+		var html = makeHTML(params);
+		res.send(html);
+		//console.log(data);
+
+	});
+
 	/*spawnThingy({'username': data[0][0], 'password': data[0][1]})
 	.then(function (resp) {
 		//res.send(resp);

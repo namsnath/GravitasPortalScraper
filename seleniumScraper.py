@@ -55,6 +55,8 @@ def main():
 
 	opts = Options()
 	opts.add_argument('log-level=3')
+	opts.add_argument('--headless')
+	opts.add_argument('--disable-gpu') 
 	browser = Chrome(options=opts)
 	browser.get('http://info.vit.ac.in/gravitas18/gravitas/gravitas_coordinator_login.asp')
 	wait = WebDriverWait(browser, 100)
