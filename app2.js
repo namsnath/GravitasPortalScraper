@@ -33,8 +33,8 @@ cron.schedule('*/10 * * * *', function() {
     });*/
 });
 
-/*
-cron.schedule('* 2 * * * *', function() {
+
+/*cron.schedule('* 2 * * * *', function() {
     console.log("Running cron job on minute 1");
     
     getDetails();
