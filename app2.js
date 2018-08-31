@@ -35,6 +35,20 @@ cron.schedule('*/10 * * * *', function() {
     });*/
 });
 
+cron.schedule('1 * * * * *', function() {
+    console.log("Running cron job on minute 1");
+    
+    getDetails();/*.then(function(dat) {
+        //heatmap = JSON.stringify(dat);
+
+        zlib.gzip(new Buffer.from(heatmap), function(err, data) {
+            cachedGzip = data;
+            console.log(data);
+            //return resolve(cachedGzip);
+        });
+    });*/
+});
+
 function getDetails() {
 	return new Promise((resolve, reject) => {
 		var promises = [null, null, null, null]
