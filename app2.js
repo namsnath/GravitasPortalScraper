@@ -3,8 +3,6 @@ const bodyParser = require("body-parser");
 const Promise = require('bluebird');
 const request = require('request-promise');
 const cron = require('node-cron');
-const zlib = require('zlib');
-const Buffer = require('buffer').Buffer;
 
 const app = express();
 const port = 3000;
