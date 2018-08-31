@@ -1,5 +1,7 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 opts = Options()
 opts.add_argument('log-level=3')
@@ -15,10 +17,10 @@ src = browser.page_source
 myElem = wait.until(EC.visibility_of_element_located((By.ID, 'loginid')))
 
 loginfield = browser.find_element_by_id('loginid')
-loginfield.send_keys(USERNAME)
+#loginfield.send_keys(USERNAME)
 
 pwfield = browser.find_element_by_id('logpassword')
-pwfield.send_keys(PASSWORD)
+#pwfield.send_keys(PASSWORD)
 
 soup = BeautifulSoup(src, 'html.parser')
 captcha = soup.find_all("input", type='hidden')
