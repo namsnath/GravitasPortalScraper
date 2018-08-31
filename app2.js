@@ -153,6 +153,7 @@ function spawnThingy(params) {
 		    //console.log('closing code: ' + code);
 		    // console.log(jsonStr);
 				jsonStr = jsonStr.replace(/'/g, '"');
+				jsonStr = jsonStr.replace(/u"/g, '"');
 				var data = JSON.parse(jsonStr);
 				// console.log(data);
 				//params['success': ]
