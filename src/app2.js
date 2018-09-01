@@ -333,6 +333,9 @@ function getData(ev) {
 			{ 
 				$match: { event: ev } 
 			},
+			{
+				$sort: { status: 1 }
+			}
 		], function(err, result) {
 			if(err) reject(err);
             var usr = [];
