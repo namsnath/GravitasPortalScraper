@@ -13,8 +13,8 @@ def read():
 	lines = sys.stdin.readlines()
 	return json.loads(lines[0])
 
-def scrapeRegs(src):
-	col_headings = ['srno', 'PID', 'name', 'type', 'status', 'ph_no', 'email']
+def scrapeRegs(src, EVENT):
+	col_headings = ['srno', 'pid', 'name', 'type', 'status', 'phno', 'email', 'event']
 	soup = BeautifulSoup(src, 'html.parser')
 	table = soup.find_all('table')[0]
 	table_body = table.find('tbody')
@@ -27,17 +27,25 @@ def scrapeRegs(src):
 		if rcount == 1:
 			continue;
 			 
-		row_data = []
+		#row_data = []
+		row_data = {}
 		cols = row.findAll('td')
-		cols = [ele.text.strip() for ele in cols]    
-		for ele in cols:
-			row_data.append(ele)
-		data.append(row_data)  # Get rid of empty values
+		cols = [ele.text.strip() for ele in cols]
+		
+		for i in range(1, len(cols)):
+			row_data[col_headings[i]] = cols[i]
+
+		#for ele in cols:
+			#row_data.append(ele)
+		#row_data.append(EVENT)
+		row_data['event'] = EVENT
+		data.append(row_data)  
 	#print(data)
 	regcount = 0
 	pendingcount = 0
 	for i in data:
-		if i[4] == 'Success':
+		#if i[4] == 'Success':
+		if i['status'] == 'Success':
 			regcount += 1
 		else:
 			pendingcount += 1
@@ -51,7 +59,7 @@ def main():
 	lines = read()
 	USERNAME = lines[0]
 	PASSWORD = lines[1]
-    #EVENT = lines[2]
+	EVENT = lines[2]
 
 	opts = Options()
 	opts.add_argument('log-level=3')
@@ -96,7 +104,7 @@ def main():
 
 	src = browser.page_source
 
-	scrapeRegs(src)
+	scrapeRegs(src, EVENT)
 	browser.quit()
 
 if __name__ == '__main__':
