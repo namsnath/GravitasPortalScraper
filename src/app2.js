@@ -418,7 +418,7 @@ function makeHTMLNew() {
 	return html;
 }
 
-app.get('/', (req, res, next) => {
+app.get('/old', (req, res, next) => {
 	if(html == null) {
 		getDetails().then((params) => res.send(html));
 	} else {
@@ -426,7 +426,7 @@ app.get('/', (req, res, next) => {
 	}
 });
 
-app.get('/new', (req, res, next) => {
+app.get('/', (req, res, next) => {
 	getCounts()
 		.then(() => res.send(html))
 		.catch((err) => console.log(err));
@@ -448,24 +448,6 @@ app.get('/forceRefresh', (req, res, next) => {
 		.then((params) => cacheData())
 		.catch((err) => console.log(err));
 });
-
-
-/*
-router.get("/getheatmap", (req, res, next) => {
-    if(cachedGzip == null)
-    {
-        getHeatMap()
-            .then(function(crs) {
-                res.send(crs);
-            });
-    } else {
-        res.header('Content-Type', 'application/json');
-        res.header('Content-Encoding', 'gzip');
-        res.send(cachedGzip);
-    }
-    
-});
-*/
 
 app.get('/SUBG', (req, res, next) => {
 	if(cachedSUBG == null)
