@@ -2,7 +2,7 @@
   "name": "gravitasportalscraper",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "./src/app2.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,9 +13,12 @@
     "buffer": "^5.2.1",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
+    "fs": "0.0.1-security",
     "lodash": "^4.17.10",
+    "mongoose": "^5.2.12",
     "node-cron": "^1.2.1",
     "nodemon": "^1.18.3",
+    "path": "^0.12.7",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "superagent": "^3.8.3",
