@@ -13,6 +13,8 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Files
+
 // Models
 const User = require(path.join(__dirname, 'models', 'User'));
 
@@ -293,7 +295,7 @@ function cacheUTH() {
 
 function cacheCB() {
 	return new Promise((resolve, reject) => {
-		 getData('Clickbait').then(function(dat) {
+		getData('Clickbait').then(function(dat) {
         dataCB = JSON.stringify(dat);
 
         zlib.gzip(new Buffer.from(dataCB), function(err, data) {
@@ -528,7 +530,7 @@ app.post('/forceRefresh', (req, res, next) => {
 		.catch((err) => console.log(err));
 });
 
-app.get('/SUBG', (req, res, next) => {
+app.get('/SUBG/getData', (req, res, next) => {
 	if(cachedSUBG == null)
     {
         cacheSUBG()
@@ -540,9 +542,10 @@ app.get('/SUBG', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedSUBG);
     }
+    console.log("Sending SUBG")
 });
 
-app.get('/LT', (req, res, next) => {
+app.get('/LT/getData', (req, res, next) => {
 	if(cachedLT == null)
     {
         cacheLT()
@@ -554,9 +557,10 @@ app.get('/LT', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedLT);
     }
+    console.log("Sending LT")
 });
 
-app.get('/UTH', (req, res, next) => {
+app.get('/UTH/getData', (req, res, next) => {
 	if(cachedUTH == null)
     {
         cacheUTH()
@@ -568,9 +572,10 @@ app.get('/UTH', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedUTH);
     }
+    console.log("Sending UTH")
 });
 
-app.get('/CB', (req, res, next) => {
+app.get('/CB/getData', (req, res, next) => {
 	if(cachedCB == null)
     {
         cacheCB()
@@ -582,6 +587,23 @@ app.get('/CB', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedCB);
     }
+    console.log("Sending CB")
+});
+
+app.get('/SUBG', (req, res, next) => {
+	res.sendFile(path.join(__dirname, 'frontend', 'eventData.html'));
+});
+
+app.get('/CB', (req, res, next) => {
+	res.sendFile(path.join(__dirname, 'frontend', 'eventData.html'));
+});
+
+app.get('/LT', (req, res, next) => {
+	res.sendFile(path.join(__dirname, 'frontend', 'eventData.html'));
+});
+
+app.get('/UTH', (req, res, next) => {
+	res.sendFile(path.join(__dirname, 'frontend', 'eventData.html'));
 });
 
 app.listen(port, () => {
