@@ -205,7 +205,7 @@ function count(ev, st="Success", ty="Internal") {
 		User.countDocuments({ event: ev, status: st, type: ty }, function (err, count) {
 			if(err) return reject(err);
 			else {
-				console.log(ev, st, ty, count);
+				//console.log(ev, st, ty, count);
 				countsNew[ev][ty][st] = count;
 				return resolve(count);
 			}
