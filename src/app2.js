@@ -46,13 +46,6 @@ var data = [
 		['sonal.bhatia2017@vitstudent.ac.in', '9717040661', 'UTH', '', '', '']
 	];
 
-var counts = {
-	'SUBG': {},
-	'Clickbait': {},
-	'Laser Tag': {},
-	'UTH': {}
-};
-
 var countsNew = {
 	'SUBG': {
 		'Internal': {
@@ -179,59 +172,6 @@ function doUpdate(params) {
 	});
 }
 
-function getDetails() {
-	return new Promise((resolve, reject) => {
-		var promises = [null, null, null, null]
-
-		promises[0] = spawnThingy({'username': data[0][0], 'password': data[0][1], 'event': data[0][2]})
-		.then((resp) => {
-			data[0][3] = resp['success'];
-			data[0][4] = resp['pending'];
-			data[0][5] = resp['data'];
-			console.log(data[0][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
-			return Promise.resolve(resp);
-		});
-		
-		promises[1] = spawnThingy({'username': data[1][0], 'password': data[1][1], 'event': data[1][2]})
-		.then((resp) => {
-			data[1][3] = resp['success'];
-			data[1][4] = resp['pending'];
-			data[1][5] = resp['data'];
-			console.log(data[1][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
-			return Promise.resolve(resp);
-		});
-		
-		promises[2] = spawnThingy({'username': data[2][0], 'password': data[2][1], 'event': data[2][2]})
-		.then((resp) => {
-			data[2][3] = resp['success'];
-			data[2][4] = resp['pending'];
-			data[2][5] = resp['data'];
-			console.log(data[2][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
-			return Promise.resolve(resp);
-		});
-
-		promises[3] = spawnThingy({'username': data[3][0], 'password': data[3][1], 'event': data[3][2]})
-		.then((resp) => {
-			data[3][3] = resp['success'];
-			data[3][4] = resp['pending'];
-			data[3][5] = resp['data'];
-			console.log(data[3][2] + ": Paid = " + resp["success"] + " Pending = " + resp["pending"])
-			return Promise.resolve(resp);
-		});
-		
-		Promise.all(promises).then(function() {
-			var params = {
-				'CB': [data[2][3], data[2][4]],
-				'SUBG': [data[0][3], data[0][4]],
-				'UTH': [data[3][3], data[3][4]],
-				'LT': [data[1][3], data[1][4]]
-			};
-
-			return resolve(makeHTML(params));
-		});
-	});
-}
-
 function getDetailsNew() {
 	return new Promise((resolve, reject) => {
 		var promises = [];
@@ -244,9 +184,9 @@ function getDetailsNew() {
 			};
 
 			promises.push(spawnThingy(params).then((resp) => {
-				counts[details[2]]['success'] = resp['success'];
-				counts[details[2]]['pending'] = resp['pending'];
-				console.log(details[2] + " Success: " + resp['success'] + " Pending: " + resp['pending']);
+				//counts[details[2]]['success'] = resp['success'];
+				//counts[details[2]]['pending'] = resp['pending'];
+				//console.log(details[2] + " Success: " + resp['success'] + " Pending: " + resp['pending']);
 				return updateDB(resp['data']);
 				//data[5] = resp['data'];
 			}));
@@ -254,7 +194,7 @@ function getDetailsNew() {
 		});
 
 		Promise.all(promises).then((res) => {
-			return resolve(makeHTMLNew());
+			return resolve(newGetCounts());
 		});
 
 	});
@@ -296,42 +236,6 @@ function newGetCounts() {
 		.catch((err) => console.log(err));
 	});
 }
-
-function getCounts() {
-	return new Promise((resolve, reject) => {
-		var evs = ['SUBG', 'Clickbait', 'Laser Tag', 'UTH'];
-
-		var cnts = {
-			'SUBG': {},
-			'Clickbait': {},
-			'Laser Tag': {},
-			'UTH': {}
-		};
-
-		var promises = [];
-
-		evs.forEach((ev) => {
-			promises.push(
-				count(ev, 'Success')
-				.then((c) => {
-					cnts[ev]['success'] = c;
-					return count(ev, 'Pending');
-				}).then((c) => {
-					cnts[ev]['pending'] = c;
-				})
-			);
-		});
-
-		Promise.all(promises).then(() => {
-			//console.log(promises);
-			console.log(cnts);
-			counts = cnts;
-			return resolve(makeHTMLNew());
-		});
-		
-	});
-}
-
 
 function cacheData() {
 	console.log('Caching Data');
@@ -474,28 +378,6 @@ function spawnThingy(params) {
 	});
 }
 
-function makeHTML(params) {
-	html = '<html><meta name="viewport" content="width=device-width, initial-scale=1"><head> <style> table {border: 1px solid black; border-spacing: 5px;}' 
-	+ ' td {border: 1px solid black; padding: 15px; text-align: left;}' 
-	+ 'th {border: 1px solid black; padding: 15px;} </style> </head> <body> <table> <tr> <th>Event</th> <th>Paid</th> <th>Pending</th> </tr> <tr> <td>Clickbait</td> <td>' 
-	+ params['CB'][0] +'</td> <td>' + params['CB'][1] +'</td> </tr> <tr> <td>Laser Tag</td> <td>' + params['LT'][0] +'</td> <td>' 
-	+ params['LT'][1] +'</td> </tr> <tr> <td>SUBG</td> <td>' + params['SUBG'][0] +'</td> <td>' + params['SUBG'][1] +'</td> </tr> <tr> <td>Under The Hood</td> <td>' 
-	+ params['UTH'][0] +'</td> <td>' + params['UTH'][1] +'</td> </tr> </table> </body> </html>';
-
-	return html;
-}
-
-function makeHTMLNew() {
-	html = '<html><meta name="viewport" content="width=device-width, initial-scale=1"><head> <style> table {border: 1px solid black; border-spacing: 5px;}' 
-	+ ' td {border: 1px solid black; padding: 15px; text-align: left;}' 
-	+ 'th {border: 1px solid black; padding: 15px;} </style> </head> <body> <table> <tr> <th>Event</th> <th>Paid</th> <th>Pending</th> </tr> <tr> <td>Clickbait</td> <td>' 
-	+ counts['Clickbait']['success'] +'</td> <td>' + counts['Clickbait']['pending'] +'</td> </tr> <tr> <td>Laser Tag</td> <td>' + counts['Laser Tag']['success'] +'</td> <td>' 
-	+ counts['Laser Tag']['pending'] +'</td> </tr> <tr> <td>SUBG</td> <td>' + counts['SUBG']['success'] +'</td> <td>' + counts['SUBG']['pending'] +'</td> </tr> <tr> <td>Under The Hood</td> <td>' 
-	+ counts['UTH']['success'] +'</td> <td>' + counts['UTH']['pending'] +'</td> </tr> </table> </body> </html>';
-
-	return html;
-}
-
 function makeHTMLNewer() {
 	var cis = countsNew['Clickbait']['Internal']['Success'],
 	 	cip = countsNew['Clickbait']['Internal']['Pending'],
@@ -618,29 +500,10 @@ function makeHTMLNewer() {
 	return html;
 }
 
-app.get('/old', (req, res, next) => {
-	if(html == null) {
-		getDetails().then((params) => res.send(html));
-	} else {
-		res.send(html);
-	}
-});
-
 app.get('/', (req, res, next) => {
-	//getCounts()
 	newGetCounts()
 		.then((html) => res.send(html.toString()))
 		.catch((err) => console.log(err));
-
-	/*if(counts) {
-		getDetailsNew()
-		.then((params) => res.send(html))
-		.catch((err) => console.log(err));
-	} else {
-		getCounts()
-		.then(() => res.send(html))
-		.catch((err) => console.log(err));	
-	}*/
 });
 
 app.get('/forceRefresh', (req, res, next) => {
