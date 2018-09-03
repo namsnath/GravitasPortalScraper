@@ -506,7 +506,7 @@ app.get('/', (req, res, next) => {
 		.catch((err) => console.log(err));
 });
 
-app.get('/forceRefresh', (req, res, next) => {
+app.post('/forceRefresh', (req, res, next) => {
 	getDetailsNew()
 		.then((params) => res.send(html))
 		.then((params) => cacheData())
