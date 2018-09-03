@@ -53,6 +53,57 @@ var counts = {
 	'UTH': {}
 };
 
+var countsNew = {
+	'SUBG': {
+		'Internal': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 105
+		},
+		'External': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 45
+		}
+	},
+	'Clickbait': {
+		'Internal': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 140
+		},
+		'External': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 60
+		}
+	},
+	'Laser Tag': {
+		'Internal': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 700
+		},
+		'External': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 300
+		}
+	},
+	'UTH': {
+		'Internal': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 105
+		},
+		'External': {
+			'Success': 0,
+			'Pending': 0,
+			'Max': 45
+		}
+	}
+};
+
 var datanew = [
 	{
 		'event': 'Clickbait',
@@ -195,7 +246,7 @@ function getDetailsNew() {
 			promises.push(spawnThingy(params).then((resp) => {
 				counts[details[2]]['success'] = resp['success'];
 				counts[details[2]]['pending'] = resp['pending'];
-				console.log("Success: " + resp['success'] + " Pending: " + resp['pending']);
+				console.log(details[2] + " Success: " + resp['success'] + " Pending: " + resp['pending']);
 				return updateDB(resp['data']);
 				//data[5] = resp['data'];
 			}));
@@ -209,16 +260,40 @@ function getDetailsNew() {
 	});
 }
 
-function count(ev, st) {
+function count(ev, st="Success", ty="Internal") {
 	return new Promise((resolve, reject) => {
-		User.countDocuments({ event: ev, status: st }, function (err, count) {
+		User.countDocuments({ event: ev, status: st, type: ty }, function (err, count) {
 			if(err) return reject(err);
 			else {
-				//console.log(count);
-				//cnts['SUBG']['success'] = count;
+				console.log(ev, st, ty, count);
+				countsNew[ev][ty][st] = count;
 				return resolve(count);
 			}
 		});
+	});
+}
+
+function newGetCounts() {
+	return new Promise((resolve, reject) => {
+		count('SUBG', 'Success', 'Internal')
+		.then((a) => count('SUBG', 'Success', 'External'))
+		.then((a) => count('SUBG', 'Pending', 'Internal'))
+		.then((a) => count('SUBG', 'Pending', 'External'))
+		.then((a) => count('Clickbait', 'Success', 'Internal'))
+		.then((a) => count('Clickbait', 'Success', 'External'))
+		.then((a) => count('Clickbait', 'Pending', 'Internal'))
+		.then((a) => count('Clickbait', 'Pending', 'External'))
+		.then((a) => count('Laser Tag', 'Success', 'Internal'))
+		.then((a) => count('Laser Tag', 'Success', 'External'))
+		.then((a) => count('Laser Tag', 'Pending', 'Internal'))
+		.then((a) => count('Laser Tag', 'Pending', 'External'))
+		.then((a) => count('UTH', 'Success', 'Internal'))
+		.then((a) => count('UTH', 'Success', 'External'))
+		.then((a) => count('UTH', 'Pending', 'Internal'))
+		.then((a) => count('UTH', 'Pending', 'External'))
+		.then((a) => makeHTMLNewer())
+		.then((html) => {return resolve(html)})
+		.catch((err) => console.log(err));
 	});
 }
 
@@ -421,6 +496,128 @@ function makeHTMLNew() {
 	return html;
 }
 
+function makeHTMLNewer() {
+	var cis = countsNew['Clickbait']['Internal']['Success'],
+	 	cip = countsNew['Clickbait']['Internal']['Pending'],
+	 	ces = countsNew['Clickbait']['External']['Success'], 
+	 	cep = countsNew['Clickbait']['External']['Pending'], 
+	 	cst = cis + ces, 
+	 	cpt = cip + cep, 
+	 	cir = countsNew['Clickbait']['Internal']['Max'] - cis, 
+	 	cer = countsNew['Clickbait']['External']['Max'] - ces;
+
+	var lis = countsNew['Laser Tag']['Internal']['Success'],
+	 	lip = countsNew['Laser Tag']['Internal']['Pending'],
+	 	les = countsNew['Laser Tag']['External']['Success'], 
+	 	lep = countsNew['Laser Tag']['External']['Pending'], 
+	 	lst = lis + les, 
+	 	lpt = lip + lep, 
+	 	lir = countsNew['Laser Tag']['Internal']['Max'] - lis, 
+	 	ler = countsNew['Laser Tag']['External']['Max'] - les;
+
+	var sis = countsNew['SUBG']['Internal']['Success'],
+	 	sip = countsNew['SUBG']['Internal']['Pending'],
+	 	ses = countsNew['SUBG']['External']['Success'], 
+	 	sep = countsNew['SUBG']['External']['Pending'], 
+	 	sst = sis + ses, 
+	 	spt = sip + sep, 
+	 	sir = countsNew['SUBG']['Internal']['Max'] - sis, 
+	 	ser = countsNew['SUBG']['External']['Max'] - ses;
+	 
+	var uis = countsNew['UTH']['Internal']['Success'],
+	 	uip = countsNew['UTH']['Internal']['Pending'],
+	 	ues = countsNew['UTH']['External']['Success'], 
+	 	uep = countsNew['UTH']['External']['Pending'], 
+	 	ust = uis + ues, 
+	 	upt = uip + uep, 
+	 	uir = countsNew['UTH']['Internal']['Max'] - uis, 
+	 	uer = countsNew['UTH']['External']['Max'] - ues; 	 	
+
+
+	html = `<html>
+	<head>
+		<style>
+			table {border: 1px solid black; border-spacing: 5px;}
+			td {border: 1px solid black; padding: 15px; text-align: left;}
+			th {border: 1px solid black; padding: 15px;}
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	
+	<body>
+		<table>
+			<tr>
+				<th rowspan=2>Event</th>
+				<th colspan=3>Paid</th>
+				<th colspan=3>Pending</th>
+				<th colspan=2>Remaining</th>
+			</tr>
+          
+          <tr>
+          		<th>Internal</th>
+            	<th>External</th>
+            	<th>Total</th>
+            	<th>Internal</th>
+            	<th>External</th>
+            	<th>Total</th>
+            	<th>Internal</th>
+            	<th>External</th>
+          </tr>
+			
+			<tr>
+				<td>ClickBait</td>
+				<td>` + cis + `</td>
+				<td>` + ces + `</td>
+              	<td>` + cst + `</td>
+				<td>` + cip + `</td>
+              	<td>` + cep + `</td>
+				<td>` + cpt + `</td>
+				<td>` + cir + `</td>
+				<td>` + cer + `</td>
+			</tr>
+			
+			<tr>
+				<td>Laser Tag</td>
+				<td>` + lis + `</td>
+				<td>` + les + `</td>
+              	<td>` + lst + `</td>
+				<td>` + lip + `</td>
+              	<td>` + lep + `</td>
+				<td>` + lpt + `</td>
+				<td>` + lir + `</td>
+				<td>` + ler + `</td>
+          </tr>
+			
+			<tr>
+				<td>SUBG</td>
+				<td>` + sis + `</td>
+				<td>` + ses + `</td>
+              	<td>` + sst + `</td>
+				<td>` + sip + `</td>
+              	<td>` + sep + `</td>
+				<td>` + spt + `</td>
+				<td>` + sir + `</td>
+				<td>` + ser + `</td>
+			</tr>
+			
+			<tr>
+				<td>Under The Hood</td>
+				<td>` + uis + `</td>
+				<td>` + ues + `</td>
+              	<td>` + ust + `</td>
+				<td>` + uip + `</td>
+              	<td>` + uep + `</td>
+				<td>` + upt + `</td>
+				<td>` + uir + `</td>
+				<td>` + uer + `</td>
+			</tr>
+		</table>
+	</body>
+</html>`;
+
+	return html;
+}
+
 app.get('/old', (req, res, next) => {
 	if(html == null) {
 		getDetails().then((params) => res.send(html));
@@ -430,8 +627,9 @@ app.get('/old', (req, res, next) => {
 });
 
 app.get('/', (req, res, next) => {
-	getCounts()
-		.then(() => res.send(html))
+	//getCounts()
+	newGetCounts()
+		.then((html) => res.send(html.toString()))
 		.catch((err) => console.log(err));
 
 	/*if(counts) {
