@@ -386,7 +386,8 @@ function makeHTMLNewer() {
 	 	cst = cis + ces, 
 	 	cpt = cip + cep, 
 	 	cir = countsNew['Clickbait']['Internal']['Max'] - cis, 
-	 	cer = countsNew['Clickbait']['External']['Max'] - ces;
+	 	cer = countsNew['Clickbait']['External']['Max'] - ces,
+	 	crt = cir + cer;
 
 	var lis = countsNew['Laser Tag']['Internal']['Success'],
 	 	lip = countsNew['Laser Tag']['Internal']['Pending'],
@@ -395,7 +396,8 @@ function makeHTMLNewer() {
 	 	lst = lis + les, 
 	 	lpt = lip + lep, 
 	 	lir = countsNew['Laser Tag']['Internal']['Max'] - lis, 
-	 	ler = countsNew['Laser Tag']['External']['Max'] - les;
+	 	ler = countsNew['Laser Tag']['External']['Max'] - les,
+	 	lrt = lir + ler;
 
 	var sis = countsNew['SUBG']['Internal']['Success'],
 	 	sip = countsNew['SUBG']['Internal']['Pending'],
@@ -404,7 +406,8 @@ function makeHTMLNewer() {
 	 	sst = sis + ses, 
 	 	spt = sip + sep, 
 	 	sir = countsNew['SUBG']['Internal']['Max'] - sis, 
-	 	ser = countsNew['SUBG']['External']['Max'] - ses;
+	 	ser = countsNew['SUBG']['External']['Max'] - ses,
+	 	srt = sir + ser;
 	 
 	var uis = countsNew['UTH']['Internal']['Success'],
 	 	uip = countsNew['UTH']['Internal']['Pending'],
@@ -413,15 +416,22 @@ function makeHTMLNewer() {
 	 	ust = uis + ues, 
 	 	upt = uip + uep, 
 	 	uir = countsNew['UTH']['Internal']['Max'] - uis, 
-	 	uer = countsNew['UTH']['External']['Max'] - ues; 	 	
+	 	uer = countsNew['UTH']['External']['Max'] - ues,
+	 	urt = uir + uer; 	 	
 
 
 	html = `<html>
 	<head>
 		<style>
 			table {border: 1px solid black; border-spacing: 5px;}
-			td {border: 1px solid black; padding: 15px; text-align: left;}
+			td {border: 1px solid black; padding: 15px; text-align: center; }
 			th {border: 1px solid black; padding: 15px;}
+			tr:hover {background-color:#f5f5f5;}
+			.highlight {background-color: #EEFF41;}
+			.bold {font-weight:bold}
+			.green {background-color: #69F0AE;}
+			.red {background-color: #FFAB91;}
+			.blue {background-color:#4FC3F7;}
 		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
@@ -430,9 +440,9 @@ function makeHTMLNewer() {
 		<table>
 			<tr>
 				<th rowspan=2>Event</th>
-				<th colspan=3>Paid</th>
-				<th colspan=3>Pending</th>
-				<th colspan=2>Remaining</th>
+				<th colspan=3 class="green">Paid</th>
+				<th colspan=3 class="red">Pending</th>
+				<th colspan=3 class="blue">Remaining</th>
 			</tr>
           
           <tr>
@@ -444,54 +454,59 @@ function makeHTMLNewer() {
             	<th>Total</th>
             	<th>Internal</th>
             	<th>External</th>
+            	<th>Total</th>
           </tr>
 			
 			<tr>
-				<td>ClickBait</td>
+				<td class="bold">ClickBait</td>
 				<td>` + cis + `</td>
 				<td>` + ces + `</td>
-              	<td>` + cst + `</td>
+              	<td class="highlight bold">` + cst + `</td>
 				<td>` + cip + `</td>
               	<td>` + cep + `</td>
-				<td>` + cpt + `</td>
+				<td class="highlight bold">` + cpt + `</td>
 				<td>` + cir + `</td>
 				<td>` + cer + `</td>
+				<td class="highlight bold">` + crt + `</td>
 			</tr>
 			
 			<tr>
-				<td>Laser Tag</td>
+				<td class="bold">Laser Tag</td>
 				<td>` + lis + `</td>
 				<td>` + les + `</td>
-              	<td>` + lst + `</td>
+              	<td class="highlight bold">` + lst + `</td>
 				<td>` + lip + `</td>
               	<td>` + lep + `</td>
-				<td>` + lpt + `</td>
+				<td class="highlight bold">` + lpt + `</td>
 				<td>` + lir + `</td>
 				<td>` + ler + `</td>
+				<td class="highlight bold">` + lrt + `</td>
           </tr>
 			
 			<tr>
-				<td>SUBG</td>
+				<td class="bold">SUBG</td>
 				<td>` + sis + `</td>
 				<td>` + ses + `</td>
-              	<td>` + sst + `</td>
+              	<td class="highlight bold">` + sst + `</td>
 				<td>` + sip + `</td>
               	<td>` + sep + `</td>
-				<td>` + spt + `</td>
+				<td class="highlight bold">` + spt + `</td>
 				<td>` + sir + `</td>
 				<td>` + ser + `</td>
+				<td class="highlight bold">` + srt + `</td>
 			</tr>
 			
 			<tr>
-				<td>Under The Hood</td>
+				<td class="bold">Under The Hood</td>
 				<td>` + uis + `</td>
 				<td>` + ues + `</td>
-              	<td>` + ust + `</td>
+              	<td class="highlight bold">` + ust + `</td>
 				<td>` + uip + `</td>
               	<td>` + uep + `</td>
-				<td>` + upt + `</td>
+				<td class="highlight bold">` + upt + `</td>
 				<td>` + uir + `</td>
 				<td>` + uer + `</td>
+				<td class="highlight bold">` + urt + `</td>
 			</tr>
 		</table>
 	</body>
