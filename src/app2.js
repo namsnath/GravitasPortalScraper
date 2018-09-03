@@ -423,7 +423,7 @@ function makeHTMLNewer() {
 	html = `<html>
 	<head>
 		<style>
-			table {border: 1px solid black; border-spacing: 5px;}
+			table {border: 1px solid black; border-spacing: 5px; margin: auto;}
 			td {border: 1px solid black; padding: 15px; text-align: center; }
 			th {border: 1px solid black; padding: 15px;}
 			tr:hover {background-color:#f5f5f5;}
