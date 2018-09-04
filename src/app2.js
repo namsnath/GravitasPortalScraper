@@ -517,24 +517,14 @@ function makeHTMLNewer() {
 	return html;
 }
 
-app.get('/', (req, res, next) => {
-	newGetCounts()
-		.then((html) => res.send(html.toString()))
-		.catch((err) => console.log(err));
-});
-
-app.post('/forceRefresh', (req, res, next) => {
-	getDetailsNew()
-		.then((params) => res.send(html))
-		.then((params) => cacheData())
-		.catch((err) => console.log(err));
-});
 
 app.get('/SUBG/getData', (req, res, next) => {
-	if(cachedSUBG == null)
+	/*if(cachedSUBG == null)
     {
         cacheSUBG()
             .then(function(crs) {
+            	res.header('Content-Type', 'application/json');
+        		res.header('Content-Encoding', 'gzip');
                 res.send(crs);
             });
     } else {
@@ -542,14 +532,20 @@ app.get('/SUBG/getData', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedSUBG);
     }
-    console.log("Sending SUBG")
+    console.log("Sending SUBG")*/
+    getData('SUBG')
+    .then(function(result) {
+    	res.send(result);
+    })
 });
 
 app.get('/LT/getData', (req, res, next) => {
-	if(cachedLT == null)
+	/*if(cachedLT == null)
     {
         cacheLT()
             .then(function(crs) {
+            	res.header('Content-Type', 'application/json');
+        		res.header('Content-Encoding', 'gzip');
                 res.send(crs);
             });
     } else {
@@ -557,14 +553,20 @@ app.get('/LT/getData', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedLT);
     }
-    console.log("Sending LT")
+    console.log("Sending LT")*/
+    getData('Laser Tag')
+    .then(function(result) {
+    	res.send(result);
+    })
 });
 
 app.get('/UTH/getData', (req, res, next) => {
-	if(cachedUTH == null)
+	/*if(cachedUTH == null)
     {
         cacheUTH()
             .then(function(crs) {
+            	res.header('Content-Type', 'application/json');
+        		res.header('Content-Encoding', 'gzip');
                 res.send(crs);
             });
     } else {
@@ -572,22 +574,32 @@ app.get('/UTH/getData', (req, res, next) => {
         res.header('Content-Encoding', 'gzip');
         res.send(cachedUTH);
     }
-    console.log("Sending UTH")
+    console.log("Sending UTH")*/
+    getData('UTH')
+    .then(function(result) {
+    	res.send(result);
+    })
 });
 
 app.get('/CB/getData', (req, res, next) => {
-	if(cachedCB == null)
+	/*if(cachedCB == null)
     {
         cacheCB()
             .then(function(crs) {
-                res.send(crs);
+            	res.header('Content-Type', 'application/json');
+       			res.header('Content-Encoding', 'gzip');
+                res.send(cachedCB);
             });
     } else {
         res.header('Content-Type', 'application/json');
         res.header('Content-Encoding', 'gzip');
         res.send(cachedCB);
     }
-    console.log("Sending CB")
+    console.log("Sending CB")*/
+    getData('Clickbait')
+    .then(function(result) {
+    	res.send(result);
+    })
 });
 
 app.get('/SUBG', (req, res, next) => {
@@ -605,6 +617,20 @@ app.get('/LT', (req, res, next) => {
 app.get('/UTH', (req, res, next) => {
 	res.sendFile(path.join(__dirname, 'frontend', 'eventData.html'));
 });
+
+app.post('/forceRefresh', (req, res, next) => {
+	getDetailsNew()
+		.then((params) => res.send(html))
+		.then((params) => cacheData())
+		.catch((err) => console.log(err));
+});
+
+app.get('/', (req, res, next) => {
+	newGetCounts()
+		.then((html) => res.send(html.toString()))
+		.catch((err) => console.log(err));
+});
+
 
 app.listen(port, () => {
 	console.log("Server listening on port " + port)

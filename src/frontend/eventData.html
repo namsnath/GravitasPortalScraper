@@ -15,22 +15,27 @@
 
     <script>
         $(document).ready(function() {
+            var dataurl = window.location.pathname +'/getData'
+            console.log(window.location.pathname +'/getData');
 
             $("#data-table").tabulator({
-                columns: [
-                    {title: "Name", field: "name", sortable: true},
-                    {title: "Phone Number", field: "phno", sortable: false},
-                    {title: "Type", field: "type", sortable: true},
-                    {title: "Status", field: "status", sortable: true},
-                    {title: "Email", field: "email", sortable: false},
-                ],
-            });
+                    columns: [
+                        {title: "Name", field: "name", sortable: true},
+                        {title: "Phone Number", field: "phno", sortable: false},
+                        {title: "Type", field: "type", sortable: true},
+                        {title: "Status", field: "status", sortable: true},
+                        {title: "Email", field: "email", sortable: false},
+                    ],
+                });
+
+            //console.log('' + window.location.pathname +'/getData');
             //$("#data-table").tabulator("setData", json);
             //$("#try").text(window.location.pathname);
-            $.get('http://35.185.0.41/SUBG/getData', function(response) {
-            //$.get('http://35.185.0.41' + window.location.pathname +'/getData', function(response) {
-                //response is already a parsed JSON
-                $("#data-table").tabulator("setData", response);
+            //$.get('http://35.185.0.41/SUBG/getData', function(response) {
+            $.get(dataurl, {}, function(data, status) {
+                console.log(data, status);
+                //var json = JSON.parse(data);
+                $("#data-table").tabulator("setData", data);
 
             });
 
