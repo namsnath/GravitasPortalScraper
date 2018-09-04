@@ -27,8 +27,8 @@
             });
             //$("#data-table").tabulator("setData", json);
             //$("#try").text(window.location.pathname);
-
-            $.get('http://35.185.0.41' + window.location.pathname +'/getData', function(response) {
+            $.get('http://35.185.0.41/SUBG/getData', function(response) {
+            //$.get('http://35.185.0.41' + window.location.pathname +'/getData', function(response) {
                 //response is already a parsed JSON
                 $("#data-table").tabulator("setData", response);
 
