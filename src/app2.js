@@ -424,6 +424,7 @@ function makeHTMLNewer() {
 
 	html = `<html>
 	<head>
+		<title>Gravitas Counts</title>
 		<style>
 			table {border: 1px solid black; border-spacing: 5px; margin: auto;}
 			td {border: 1px solid black; padding: 15px; text-align: center; }
@@ -473,19 +474,6 @@ function makeHTMLNewer() {
 			</tr>
 			
 			<tr>
-				<td class="bold">Laser Tag</td>
-				<td>` + lis + `</td>
-				<td>` + les + `</td>
-              	<td class="highlight bold">` + lst + `</td>
-				<td>` + lip + `</td>
-              	<td>` + lep + `</td>
-				<td class="highlight bold">` + lpt + `</td>
-				<td>` + lir + `</td>
-				<td>` + ler + `</td>
-				<td class="highlight bold">` + lrt + `</td>
-          </tr>
-			
-			<tr>
 				<td class="bold">SUBG</td>
 				<td>` + sis + `</td>
 				<td>` + ses + `</td>
@@ -497,7 +485,7 @@ function makeHTMLNewer() {
 				<td>` + ser + `</td>
 				<td class="highlight bold">` + srt + `</td>
 			</tr>
-			
+
 			<tr>
 				<td class="bold">Under The Hood</td>
 				<td>` + uis + `</td>
@@ -510,6 +498,19 @@ function makeHTMLNewer() {
 				<td>` + uer + `</td>
 				<td class="highlight bold">` + urt + `</td>
 			</tr>
+
+			<tr>
+				<td class="bold">Laser Tag</td>
+				<td>` + lis + `</td>
+				<td>` + les + `</td>
+              	<td class="highlight bold">` + lst + `</td>
+				<td>` + lip + `</td>
+              	<td>` + lep + `</td>
+				<td class="highlight bold">` + lpt + `</td>
+				<td>` + lir + `</td>
+				<td>` + ler + `</td>
+				<td class="highlight bold">` + lrt + `</td>
+          	</tr>
 		</table>
 	</body>
 </html>`;
