@@ -619,11 +619,56 @@ app.get('/UTH', (req, res, next) => {
 	res.sendFile(path.join(__dirname, 'frontend', 'eventData.html'));
 });
 
+app.get('/SUBGReg', (req, res, next) => {
+	User.aggregate([
+		{
+			$match: {event: 'SUBG', status: 'Success'}
+		},
+		{
+			$project: {
+				_id: false,
+				gravitasID: '$pid',
+				//type: false,
+				//event: false,
+				name: true,
+				email: true,
+				phone: '$phno',
+				registered: 'false',
+				
+				//status: false,
+			}
+		}
+	], function(err, data) {
+		res.send(data);
+	});
+});
+
+app.get('/getParticipants', (req, res, next) => {
+	User.aggregate([
+		{
+			$group: {
+				_id: {name: "$name", email: "$email", phno: "$phno", gravitasID: "$pid"}
+			}
+		}, 
+		{
+			$project: {_id: 0, name: "$_id.name", email: "$_id.email", phno: "$_id.phno", gravitasID: "$_id.gravitasID"} 
+		}
+	], function(err, data) {
+		res.send(data);
+	});
+});
+
 app.post('/forceRefresh', (req, res, next) => {
 	getDetailsNew()
 		.then((params) => res.send(html))
 		.then((params) => cacheData())
 		.catch((err) => console.log(err));
+});
+
+app.get('/getEmails', (req, res, next) => {
+	User.aggregate([{'$group': {'_id': '$email'}}, {'$project': {email: '$_id', _id: 0}}, {'$sort': {email: 1}}], function(err, data) {
+		res.send(data);
+	});
 });
 
 app.get('/', (req, res, next) => {

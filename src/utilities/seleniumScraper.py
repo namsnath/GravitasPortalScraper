@@ -64,10 +64,10 @@ def main():
 	EVENT = lines[2]
 
 	opts = Options()
-	#opts.add_argument('--no-sandbox')
-	#opts.add_argument('--disable-dev-shm-usage')
+	opts.add_argument('--no-sandbox')
+	opts.add_argument('--disable-dev-shm-usage')
 	opts.add_argument('--log-level=3')
-	#opts.add_argument('--headless')
+	opts.add_argument('--headless')
 	opts.add_argument('--disable-gpu')
 	
 	browser = Chrome(options=opts)
